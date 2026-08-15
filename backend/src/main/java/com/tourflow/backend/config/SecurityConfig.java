@@ -30,13 +30,12 @@ public class SecurityConfig {
     private final TokenAuthenticationFilter tokenFilter;
 
     /*
-     * Railway production:
-     * FRONTEND_URL=https://your-tourflow.vercel.app
+     * Optional Railway environment variable.
      *
-     * Local fallback:
-     * http://localhost:5173
+     * Example:
+     * FRONTEND_URL=https://tour-flow-two.vercel.app
      */
-    @Value("${FRONTEND_URL:http://localhost:5173}")
+    @Value("${FRONTEND_URL:}")
     private String frontendUrl;
 
 
@@ -61,39 +60,58 @@ public class SecurityConfig {
 
 
         /*
-         * Allowed frontend addresses.
+         * Allowed frontend origins.
          *
-         * Local development still works.
-         * Railway will also allow the
-         * Vercel URL supplied through FRONTEND_URL.
+         * Localhost addresses are kept for development.
+         * Vercel production URL is explicitly allowed.
          */
         List<String> allowedOrigins =
-                new ArrayList<>();
+                new ArrayList<>(
+                        List.of(
+                                "http://localhost:5173",
+                                "http://127.0.0.1:5173",
+                                "http://localhost:5174",
+                                "http://127.0.0.1:5174",
+                                "https://tour-flow-two.vercel.app"
+                        )
+                );
 
-        allowedOrigins.add(
-                "http://localhost:5173"
-        );
 
-        allowedOrigins.add(
-                "http://127.0.0.1:5173"
-        );
-
-        allowedOrigins.add(
-                "http://localhost:5174"
-        );
-
-        allowedOrigins.add(
-                "http://127.0.0.1:5174"
-        );
-
+        /*
+         * Also allow FRONTEND_URL from Railway
+         * if one is configured.
+         */
         if (
                 frontendUrl != null &&
-                        !frontendUrl.isBlank() &&
-                        !allowedOrigins.contains(frontendUrl)
+                        !frontendUrl.isBlank()
         ) {
-            allowedOrigins.add(
-                    frontendUrl
-            );
+
+            String normalizedFrontendUrl =
+                    frontendUrl.trim();
+
+            /*
+             * CORS origins should not end with "/".
+             */
+            while (
+                    normalizedFrontendUrl.endsWith("/")
+            ) {
+                normalizedFrontendUrl =
+                        normalizedFrontendUrl.substring(
+                                0,
+                                normalizedFrontendUrl.length() - 1
+                        );
+            }
+
+            if (
+                    !normalizedFrontendUrl.isBlank() &&
+                            !allowedOrigins.contains(
+                                    normalizedFrontendUrl
+                            )
+            ) {
+                allowedOrigins.add(
+                        normalizedFrontendUrl
+                );
+            }
         }
 
 
@@ -199,7 +217,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * CORS preflight
+                                 * CORS preflight requests
                                  */
                                 .requestMatchers(
                                         HttpMethod.OPTIONS,
@@ -220,7 +238,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Public tourist-site viewing
+                                 * Public tourist site viewing
                                  */
                                 .requestMatchers(
                                         HttpMethod.GET,
@@ -231,7 +249,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Logged-in users
+                                 * Logged-in user endpoints
                                  */
                                 .requestMatchers(
                                         "/api/auth/me",
@@ -310,7 +328,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Add tourist sites
+                                 * Create tourist sites
                                  */
                                 .requestMatchers(
                                         HttpMethod.POST,
@@ -360,7 +378,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Everything else
+                                 * Everything else requires login
                                  */
                                 .anyRequest()
                                 .authenticated()
