@@ -1,0 +1,1192 @@
+:root {
+  --navy: #10313d;
+  --deep: #0b2731;
+  --green: #079455;
+  --green-dark: #067647;
+  --green-light: #ecfdf3;
+  --bg: #f4f6f8;
+  --white: #ffffff;
+  --text: #172033;
+  --muted: #667085;
+  --border: #dfe4ea;
+  --red: #d92d20;
+  --red-light: #fef3f2;
+  --blue: #175cd3;
+  --blue-light: #eff8ff;
+  --orange: #dc6803;
+  --orange-light: #fff4e5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* TOP BAR */
+
+.topbar {
+  min-height: 78px;
+  padding: 12px 48px;
+  background: var(--navy);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand,
+.admin-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo,
+.logo-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: transparent;
+  color: white;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.brand-logo img,
+.logo-mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.brand h1,
+.brand p,
+.login-brand h1,
+.login-brand p {
+  margin: 0;
+}
+
+.brand h1 {
+  font-size: 21px;
+}
+
+.brand p,
+.admin-profile span {
+  margin-top: 2px;
+  color: #c6d3d8;
+  font-size: 10px;
+}
+
+.admin-profile {
+  text-align: right;
+}
+
+.admin-profile strong,
+.admin-profile span {
+  display: block;
+}
+
+.header-logout {
+  height: 38px;
+  padding: 0 15px;
+  border: 1px solid rgb(255 255 255 / 30%);
+  border-radius: 8px;
+  background: transparent;
+  color: white;
+  font-weight: 700;
+}
+
+/* GENERAL */
+
+.main-content {
+  width: min(1180px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 40px 0 70px;
+}
+
+.entrance-width {
+  width: min(980px, calc(100% - 36px));
+}
+
+.page-heading,
+.tourist-hero {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.page-heading h2,
+.tourist-hero h2 {
+  margin: 7px 0 7px;
+  font-size: 32px;
+  letter-spacing: -0.03em;
+}
+
+.page-heading p,
+.tourist-hero p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.eyebrow {
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.stat-card {
+  min-width: 165px;
+  padding: 17px 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+}
+
+.stat-card strong,
+.stat-card span {
+  display: block;
+}
+
+.stat-card strong {
+  color: var(--green);
+  font-size: 26px;
+}
+
+.stat-card span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.panel {
+  margin-bottom: 25px;
+  padding: 25px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: white;
+}
+
+.panel-heading {
+  margin-bottom: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.panel-heading h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.panel-heading p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.alert {
+  margin-bottom: 18px;
+  padding: 13px 16px;
+  border-radius: 9px;
+  font-weight: 700;
+}
+
+.alert-error {
+  border: 1px solid #fecdca;
+  background: var(--red-light);
+  color: var(--red);
+}
+
+.alert-success {
+  border: 1px solid #abefc6;
+  background: var(--green-light);
+  color: var(--green-dark);
+}
+
+.button {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+.button-primary {
+  background: var(--green);
+  color: white;
+}
+
+.button-secondary {
+  border-color: #cdd5df;
+  background: white;
+  color: var(--text);
+}
+
+.button-danger {
+  border-color: #fecdca;
+  background: var(--red-light);
+  color: var(--red);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* FORMS */
+
+.two-column-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field label {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.field input,
+.field select,
+.field textarea,
+.ticket-search input {
+  width: 100%;
+  border: 1px solid #ccd4dd;
+  border-radius: 8px;
+  outline: none;
+  background: white;
+}
+
+.field input,
+.field select {
+  height: 43px;
+  padding: 0 12px;
+}
+
+.field textarea {
+  padding: 12px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.ticket-search input:focus {
+  border-color: var(--green);
+  box-shadow:
+    0 0 0 3px rgb(7 148 85 / 10%);
+}
+
+.full-field {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ADMIN SITE CARDS */
+
+.site-grid,
+.destination-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(285px, 1fr)
+    );
+  gap: 18px;
+}
+
+.site-card,
+.destination-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+}
+
+.site-photo,
+.destination-photo {
+  height: 170px;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      var(--deep),
+      var(--green)
+    );
+}
+
+.site-photo img,
+.destination-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.image-fallback {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background:
+    linear-gradient(
+      135deg,
+      var(--deep),
+      var(--green)
+    );
+  color: white;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.image-fallback b {
+  font-size: 34px;
+}
+
+.image-fallback span {
+  color: rgb(255 255 255 / 80%);
+  font-size: 11px;
+}
+
+.site-card-body {
+  padding: 17px;
+}
+
+.site-title-line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.site-title-line h4,
+.destination-body h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.site-title-line p,
+.destination-body p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.status-pill,
+.booking-pill {
+  display: inline-block;
+  border-radius: 999px;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.status-pill {
+  padding: 5px 8px;
+}
+
+.status-pill.open,
+.booking-pill.confirmed {
+  background: var(--green-light);
+  color: var(--green-dark);
+}
+
+.status-pill.closed,
+.booking-pill.cancelled {
+  background: var(--red-light);
+  color: var(--red);
+}
+
+.status-pill.maintenance {
+  background: var(--orange-light);
+  color: var(--orange);
+}
+
+.booking-pill.checked_in {
+  background: var(--blue-light);
+  color: var(--blue);
+}
+
+.booking-pill.completed {
+  background: #f2f4f7;
+  color: #475467;
+}
+
+.site-description {
+  min-height: 54px;
+  margin: 15px 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.crowd-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.crowd-line strong {
+  color: var(--text);
+}
+
+.progress {
+  height: 7px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8edf1;
+}
+
+.progress div {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+}
+
+.occupancy-text {
+  margin: 6px 0 14px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.card-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.empty-box {
+  padding: 46px 20px;
+  border: 1px dashed #ccd4dd;
+  border-radius: 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* TOURIST */
+
+.destination-card {
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.destination-card:hover {
+  transform: translateY(-2px);
+}
+
+.destination-card.selected {
+  border-color: var(--green);
+  box-shadow:
+    0 0 0 3px rgb(7 148 85 / 10%);
+}
+
+.destination-body {
+  padding: 16px;
+}
+
+.destination-crowd {
+  margin-top: 13px;
+  padding-top: 12px;
+  border-top: 1px solid #eef1f4;
+}
+
+.booking-list {
+  display: grid;
+  gap: 12px;
+}
+
+.booking-row {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns:
+    minmax(200px, 0.9fr)
+    minmax(280px, 1.4fr)
+    auto;
+  align-items: center;
+  gap: 17px;
+}
+
+.booking-pill {
+  padding: 5px 8px;
+}
+
+.booking-row h4 {
+  margin: 7px 0 3px;
+}
+
+.booking-row p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.booking-meta {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 1fr);
+  gap: 12px;
+}
+
+.booking-meta span,
+.ticket-grid span,
+.verify-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.booking-meta b,
+.ticket-grid b,
+.verify-grid b {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+}
+
+.booking-buttons {
+  display: flex;
+  gap: 7px;
+}
+
+/* QR MODAL */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  padding: 20px;
+  background:
+    rgb(16 24 40 / 60%);
+  display: grid;
+  place-items: center;
+}
+
+.qr-modal {
+  width: min(420px, 100%);
+  padding: 27px;
+  border-radius: 17px;
+  background: white;
+  text-align: center;
+}
+
+.modal-logo {
+  margin: 0 auto 12px;
+}
+
+.qr-modal h3 {
+  margin: 7px 0 3px;
+  font-size: 22px;
+}
+
+.qr-modal > p {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.qr-image {
+  width: 245px;
+  max-width: 100%;
+  margin: 12px auto;
+  display: block;
+}
+
+.ticket-grid {
+  margin-bottom: 15px;
+  padding: 13px;
+  border-radius: 9px;
+  background: #f7f9fb;
+  display: grid;
+  grid-template-columns:
+    1fr 1fr;
+  gap: 12px;
+  text-align: left;
+}
+
+.ticket-note {
+  margin-bottom: 16px;
+}
+
+/* ENTRANCE */
+
+.ticket-search {
+  display: grid;
+  grid-template-columns:
+    1fr 170px;
+  gap: 10px;
+}
+
+.ticket-search input {
+  height: 43px;
+  padding: 0 12px;
+}
+
+.verify-top {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #edf0f3;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.verify-top h3 {
+  margin: 7px 0 3px;
+  font-size: 23px;
+}
+
+.verify-top p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.large-pill {
+  height: fit-content;
+  padding: 8px 11px;
+  font-size: 9px;
+}
+
+.verify-grid {
+  margin: 22px 0;
+  display: grid;
+  grid-template-columns:
+    repeat(4, 1fr);
+  gap: 18px;
+}
+
+.verify-grid b {
+  overflow-wrap: anywhere;
+}
+
+.checkin-button {
+  width: 100%;
+  min-height: 46px;
+}
+
+.disabled-message {
+  padding: 14px;
+  border-radius: 9px;
+  background: #f2f4f7;
+  color: #475467;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* LOGIN */
+
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1.06fr)
+    minmax(440px, 0.94fr);
+  background: #f7f9fb;
+}
+
+.login-visual {
+  position: relative;
+  min-height: 100vh;
+  padding: 46px 54px 48px;
+  overflow: hidden;
+  color: white;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(5 34 43 / 55%) 0%,
+      rgb(5 45 45 / 52%) 36%,
+      rgb(4 74 52 / 78%) 100%
+    ),
+    linear-gradient(
+      110deg,
+      rgb(6 49 58 / 88%) 0%,
+      rgb(4 96 62 / 55%) 65%,
+      rgb(4 96 62 / 38%) 100%
+    ),
+    url("./assets/login-tourism-hero.png")
+      center / cover no-repeat;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 78% 30%,
+      rgb(52 211 153 / 15%),
+      transparent 29%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 48%,
+      rgb(3 29 34 / 22%) 100%
+    );
+}
+
+.login-visual::after {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  pointer-events: none;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 22px;
+}
+
+.login-brand,
+.login-message {
+  position: relative;
+  z-index: 1;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.login-brand .logo-mark {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  box-shadow:
+    0 10px 28px rgb(0 0 0 / 20%);
+}
+
+.login-brand h1 {
+  font-size: 27px;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.login-brand p {
+  margin-top: 5px;
+  color: rgb(236 253 245 / 82%);
+  font-size: 10px;
+  letter-spacing: 0.015em;
+}
+
+.login-message {
+  width: min(640px, 92%);
+  margin-top: auto;
+  margin-bottom: 18px;
+  padding: 30px 31px 28px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 20px;
+  background:
+    linear-gradient(
+      135deg,
+      rgb(6 41 48 / 64%),
+      rgb(5 96 65 / 42%)
+    );
+  box-shadow:
+    0 24px 70px rgb(0 0 0 / 18%);
+  backdrop-filter: blur(5px);
+}
+
+.login-location-pill {
+  width: fit-content;
+  margin-bottom: 25px;
+  padding: 7px 10px;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 8%);
+  color: rgb(240 253 250 / 88%);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.login-eyebrow {
+  color: #86efac;
+}
+
+.login-message h2 {
+  max-width: 580px;
+  margin: 11px 0 16px;
+  font-size:
+    clamp(42px, 4.6vw, 64px);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.login-message > p {
+  max-width: 520px;
+  margin: 0;
+  color: rgb(236 253 245 / 84%);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.login-capabilities {
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.login-capabilities span {
+  padding: 8px 11px;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 8%);
+  color: rgb(255 255 255 / 90%);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.login-capabilities i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6ce9a6;
+  box-shadow:
+    0 0 0 3px rgb(108 233 166 / 12%);
+}
+
+.login-panel {
+  min-height: 100vh;
+  padding: 38px 42px;
+  background:
+    radial-gradient(
+      circle at 82% 12%,
+      rgb(7 148 85 / 5%),
+      transparent 28%
+    ),
+    #f8fafb;
+  display: grid;
+  place-items: center;
+}
+
+.login-card {
+  width: min(455px, 100%);
+  padding: 34px 34px 30px;
+  border: 1px solid #e5e9ef;
+  border-radius: 20px;
+  background: rgb(255 255 255 / 96%);
+  box-shadow:
+    0 20px 55px rgb(16 24 40 / 8%);
+}
+
+.login-card h2 {
+  margin: 8px 0 7px;
+  font-size: 31px;
+  letter-spacing: -0.035em;
+}
+
+.login-subtitle {
+  margin: 0 0 25px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.login-card .field {
+  margin-bottom: 15px;
+}
+
+.login-card .field input {
+  height: 46px;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.login-button {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 2px;
+  box-shadow:
+    0 8px 22px rgb(7 148 85 / 16%);
+}
+
+.dev-accounts {
+  margin-top: 18px;
+  padding: 13px;
+  border: 1px solid #e3e8ee;
+  border-radius: 12px;
+  background: #f8fafb;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.dev-accounts > p {
+  grid-column: 1 / -1;
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+}
+
+.dev-accounts button {
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid #e0e5eb;
+  border-radius: 8px;
+  background: white;
+  text-align: left;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.dev-accounts button:hover {
+  transform: translateY(-1px);
+  border-color: #abefc6;
+  background: #f6fef9;
+}
+
+.dev-accounts strong,
+.dev-accounts span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dev-accounts strong {
+  color: #1d2939;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.dev-accounts span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 7px;
+  white-space: nowrap;
+}
+
+/* OTHER ROLES */
+
+.unsupported-role {
+  min-height: 100vh;
+  padding: 30px;
+  background:
+    linear-gradient(
+      135deg,
+      var(--deep),
+      var(--green-dark)
+    );
+  display: grid;
+  place-items: center;
+}
+
+.unsupported-role > div {
+  width: min(430px, 100%);
+  padding: 32px;
+  border-radius: 15px;
+  background: white;
+  text-align: center;
+}
+
+.unsupported-role p {
+  color: var(--muted);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .booking-row {
+    grid-template-columns:
+      1fr;
+  }
+
+  .verify-grid {
+    grid-template-columns:
+      1fr 1fr;
+  }
+}
+
+@media (max-width: 920px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-visual {
+    min-height: 500px;
+    padding: 34px;
+  }
+
+  .login-message {
+    width: min(620px, 100%);
+    margin-top: 100px;
+  }
+
+  .login-message h2 {
+    font-size: clamp(39px, 8vw, 56px);
+  }
+
+  .login-panel {
+    min-height: auto;
+    padding: 46px 24px 60px;
+  }
+}
+
+@media (max-width: 680px) {
+  .topbar {
+    padding: 12px 18px;
+  }
+
+  .admin-profile > div {
+    display: none;
+  }
+
+  .main-content {
+    width:
+      min(100% - 22px, 1180px);
+    padding-top: 24px;
+  }
+
+  .page-heading,
+  .tourist-hero,
+  .panel-heading,
+  .verify-top {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .two-column-form,
+  .ticket-search {
+    grid-template-columns: 1fr;
+  }
+
+  .full-field {
+    grid-column: auto;
+  }
+
+  .verify-grid,
+  .booking-meta {
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+}
+
+
+@media (max-width: 520px) {
+  .login-visual {
+    min-height: 480px;
+    padding: 24px;
+  }
+
+  .login-visual::after {
+    inset: 10px;
+  }
+
+  .login-message {
+    padding: 22px;
+    margin-top: 70px;
+  }
+
+  .login-location-pill {
+    display: none;
+  }
+
+  .login-message > p {
+    font-size: 13px;
+  }
+
+  .login-capabilities {
+    gap: 6px;
+  }
+
+  .login-capabilities span {
+    font-size: 9px;
+  }
+
+  .login-panel {
+    padding: 28px 14px 44px;
+  }
+
+  .login-card {
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  .dev-accounts {
+    grid-template-columns: 1fr;
+  }
+
+  .dev-accounts > p {
+    grid-column: auto;
+  }
+}
+
+
+/* TourFlow v9 motion-shell compatibility */
+#root {
+  min-height: 100vh;
+}

@@ -1,0 +1,288 @@
+.entrance-page {
+  min-height: 100vh;
+  background: #f4f6f8;
+  color: #172033;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.entrance-header {
+  min-height: 78px;
+  padding: 12px 48px;
+  background: #102f3a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.entrance-brand,
+.entrance-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.entrance-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: #079455;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+}
+
+.entrance-brand h1,
+.entrance-brand span,
+.entrance-user strong,
+.entrance-user span {
+  display: block;
+  margin: 0;
+}
+
+.entrance-brand h1 {
+  font-size: 21px;
+}
+
+.entrance-brand span,
+.entrance-user span {
+  margin-top: 2px;
+  color: #c4d1d6;
+  font-size: 11px;
+}
+
+.entrance-user {
+  text-align: right;
+}
+
+.entrance-user button {
+  min-height: 38px;
+  padding: 0 15px;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 8px;
+  background: transparent;
+  color: white;
+  font-weight: 700;
+}
+
+.entrance-content {
+  width: min(1000px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 42px 0 70px;
+}
+
+.entrance-title {
+  margin-bottom: 25px;
+}
+
+.entrance-title p {
+  margin: 0;
+  color: #079455;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.entrance-title h2 {
+  margin: 6px 0 8px;
+  font-size: 32px;
+}
+
+.entrance-title span,
+.entrance-search p {
+  color: #667085;
+}
+
+.entrance-alert {
+  margin-bottom: 18px;
+  padding: 14px 17px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.entrance-alert.error {
+  border: 1px solid #fecdca;
+  background: #fef3f2;
+  color: #d92d20;
+}
+
+.entrance-alert.success {
+  border: 1px solid #abefc6;
+  background: #ecfdf3;
+  color: #067647;
+}
+
+.entrance-search,
+.entrance-booking {
+  padding: 26px;
+  border: 1px solid #dfe4ea;
+  border-radius: 14px;
+  background: white;
+}
+
+.entrance-search {
+  margin-bottom: 24px;
+}
+
+.entrance-search h3 {
+  margin: 0;
+}
+
+.entrance-search p {
+  margin: 6px 0 20px;
+  font-size: 12px;
+}
+
+.entrance-search form {
+  display: grid;
+  grid-template-columns: 1fr 170px;
+  gap: 10px;
+}
+
+.entrance-search input {
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid #ccd4dd;
+  border-radius: 8px;
+  outline: none;
+}
+
+.entrance-search input:focus {
+  border-color: #079455;
+  box-shadow: 0 0 0 3px rgb(7 148 85 / 11%);
+}
+
+.entrance-search button,
+.entrance-checkin {
+  border: 0;
+  border-radius: 8px;
+  background: #079455;
+  color: white;
+  font-weight: 800;
+}
+
+.entrance-search button:disabled,
+.entrance-checkin:disabled {
+  opacity: .6;
+}
+
+.entrance-booking-top {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #edf0f3;
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.entrance-booking-top small {
+  color: #079455;
+  font-weight: 900;
+}
+
+.entrance-booking-top h3 {
+  margin: 7px 0 3px;
+  font-size: 24px;
+}
+
+.entrance-booking-top p {
+  margin: 0;
+  color: #667085;
+  font-weight: 700;
+}
+
+.entrance-status {
+  height: fit-content;
+  padding: 8px 11px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 900;
+}
+
+.entrance-status.confirmed {
+  background: #ecfdf3;
+  color: #067647;
+}
+
+.entrance-status.checked_in {
+  background: #eff8ff;
+  color: #175cd3;
+}
+
+.entrance-status.cancelled {
+  background: #fef3f2;
+  color: #d92d20;
+}
+
+.entrance-status.completed {
+  background: #f2f4f7;
+  color: #475467;
+}
+
+.entrance-details {
+  margin: 23px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.entrance-details span,
+.entrance-details strong {
+  display: block;
+}
+
+.entrance-details span {
+  color: #667085;
+  font-size: 10px;
+}
+
+.entrance-details strong {
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+
+.entrance-checkin {
+  width: 100%;
+  min-height: 47px;
+}
+
+.entrance-disabled {
+  padding: 14px;
+  border-radius: 8px;
+  background: #f2f4f7;
+  color: #475467;
+  text-align: center;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .entrance-header {
+    padding: 12px 18px;
+  }
+
+  .entrance-user > div {
+    display: none;
+  }
+
+  .entrance-search form {
+    grid-template-columns: 1fr;
+  }
+
+  .entrance-search button {
+    min-height: 44px;
+  }
+
+  .entrance-details {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .entrance-booking-top {
+    flex-direction: column;
+  }
+}
