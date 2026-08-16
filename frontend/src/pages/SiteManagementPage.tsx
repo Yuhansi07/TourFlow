@@ -1,10 +1,14 @@
+import ConfirmModal from "../components/ConfirmModal";
+import UserManagementPanel
+  from "../components/UserManagementPanel";
+
 import {
   useEffect,
   useState,
   type FormEvent,
 } from "react";
 
-import ConfirmModal from "../components/ConfirmModal";
+
 
 import {
   createSite,
@@ -1017,6 +1021,15 @@ export default function SiteManagementPage({
         {/* ===================================================
             ADD / EDIT TOURIST SITE
             =================================================== */}
+            {/* ===================================================
+                USER MANAGEMENT
+                =================================================== */}
+
+            <UserManagementPanel
+              onUsersChanged={() => {
+                void loadDashboard();
+              }}
+            />
 
         <section className="panel">
 

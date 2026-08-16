@@ -5,6 +5,7 @@ import com.tourflow.backend.security.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.http.HttpMethod;
 
 import org.springframework.security.config.Customizer;
@@ -24,17 +25,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Configuration
 public class SecurityConfig {
 
     private final TokenAuthenticationFilter tokenFilter;
 
-    /*
-     * Optional Railway environment variable.
-     *
-     * Example:
-     * FRONTEND_URL=https://tour-flow-two.vercel.app
-     */
+
     @Value("${FRONTEND_URL:}")
     private String frontendUrl;
 
@@ -42,12 +39,15 @@ public class SecurityConfig {
     public SecurityConfig(
             TokenAuthenticationFilter tokenFilter
     ) {
-        this.tokenFilter = tokenFilter;
+
+        this.tokenFilter =
+                tokenFilter;
     }
 
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
@@ -59,12 +59,6 @@ public class SecurityConfig {
                 new CorsConfiguration();
 
 
-        /*
-         * Allowed frontend origins.
-         *
-         * Localhost addresses are kept for development.
-         * Vercel production URL is explicitly allowed.
-         */
         List<String> allowedOrigins =
                 new ArrayList<>(
                         List.of(
@@ -77,10 +71,6 @@ public class SecurityConfig {
                 );
 
 
-        /*
-         * Also allow FRONTEND_URL from Railway
-         * if one is configured.
-         */
         if (
                 frontendUrl != null &&
                         !frontendUrl.isBlank()
@@ -89,12 +79,12 @@ public class SecurityConfig {
             String normalizedFrontendUrl =
                     frontendUrl.trim();
 
-            /*
-             * CORS origins should not end with "/".
-             */
+
             while (
-                    normalizedFrontendUrl.endsWith("/")
+                    normalizedFrontendUrl
+                            .endsWith("/")
             ) {
+
                 normalizedFrontendUrl =
                         normalizedFrontendUrl.substring(
                                 0,
@@ -102,12 +92,14 @@ public class SecurityConfig {
                         );
             }
 
+
             if (
                     !normalizedFrontendUrl.isBlank() &&
                             !allowedOrigins.contains(
                                     normalizedFrontendUrl
                             )
             ) {
+
                 allowedOrigins.add(
                         normalizedFrontendUrl
                 );
@@ -177,6 +169,7 @@ public class SecurityConfig {
             HttpSecurity http
     ) throws Exception {
 
+
         http
 
                 .csrf(
@@ -217,7 +210,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * CORS preflight requests
+                                 * Browser CORS
                                  */
                                 .requestMatchers(
                                         HttpMethod.OPTIONS,
@@ -227,7 +220,8 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Authentication
+                                 * Public login and
+                                 * tourist registration
                                  */
                                 .requestMatchers(
                                         HttpMethod.POST,
@@ -238,7 +232,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Public tourist site viewing
+                                 * Public destination browsing
                                  */
                                 .requestMatchers(
                                         HttpMethod.GET,
@@ -249,13 +243,28 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Logged-in user endpoints
+                                 * Logged-in account actions
                                  */
                                 .requestMatchers(
                                         "/api/auth/me",
                                         "/api/auth/logout"
                                 )
                                 .authenticated()
+
+
+                                /*
+                                 * IMPORTANT:
+                                 *
+                                 * Everything under /api/admin
+                                 * can only be accessed by a
+                                 * SYSTEM_ADMIN account.
+                                 */
+                                .requestMatchers(
+                                        "/api/admin/**"
+                                )
+                                .hasRole(
+                                        "SYSTEM_ADMIN"
+                                )
 
 
                                 /*
@@ -319,7 +328,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Tourist bookings
+                                 * Bookings
                                  */
                                 .requestMatchers(
                                         "/api/bookings/**"
@@ -328,7 +337,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Create tourist sites
+                                 * Site creation
                                  */
                                 .requestMatchers(
                                         HttpMethod.POST,
@@ -342,7 +351,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Update tourist sites
+                                 * Site update
                                  */
                                 .requestMatchers(
                                         HttpMethod.PUT,
@@ -365,7 +374,7 @@ public class SecurityConfig {
 
 
                                 /*
-                                 * Delete tourist sites
+                                 * Site delete
                                  */
                                 .requestMatchers(
                                         HttpMethod.DELETE,

@@ -2,10 +2,16 @@ import type {
   AuthResponse,
   AuthUser,
   LoginRequest,
+  RegisterRequest,
 } from "../types/Auth";
 
-import { API_BASE_URL } from "../config/apiConfig";
-const API = `${API_BASE_URL}/api/auth`;
+import {
+  API_BASE_URL,
+} from "../config/apiConfig";
+
+
+const API =
+  `${API_BASE_URL}/api/auth`;
 
 const TOKEN_KEY =
   "tourflow_auth_token";
@@ -13,14 +19,18 @@ const TOKEN_KEY =
 const USER_KEY =
   "tourflow_auth_user";
 
+
 async function handleResponse<T>(
   response: Response
 ): Promise<T> {
+
   if (!response.ok) {
+
     let message =
       `Request failed (${response.status})`;
 
     try {
+
       const data =
         await response.json();
 
@@ -28,12 +38,14 @@ async function handleResponse<T>(
         data.message ??
         data.error ??
         message;
+
     } catch {
-      // Keep default message.
+      // Keep default error message.
     }
 
     throw new Error(message);
   }
+
 
   if (response.status === 204) {
     return undefined as T;
@@ -42,32 +54,10 @@ async function handleResponse<T>(
   return response.json() as Promise<T>;
 }
 
-export async function login(
-  request: LoginRequest
-): Promise<AuthResponse> {
-  clearStoredAuthentication();
 
-  const response =
-    await fetch(
-      `${API}/login`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type":
-            "application/json",
-          Accept:
-            "application/json",
-        },
-        body: JSON.stringify(
-          request
-        ),
-      }
-    );
-
-  const auth =
-    await handleResponse<AuthResponse>(
-      response
-    );
+function storeAuthentication(
+  auth: AuthResponse
+): void {
 
   localStorage.setItem(
     TOKEN_KEY,
@@ -80,65 +70,169 @@ export async function login(
       auth.user
     )
   );
+}
+
+
+export async function login(
+  request: LoginRequest
+): Promise<AuthResponse> {
+
+  clearStoredAuthentication();
+
+  const response =
+    await fetch(
+      `${API}/login`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Accept:
+            "application/json",
+        },
+
+        body: JSON.stringify(
+          request
+        ),
+      }
+    );
+
+
+  const auth =
+    await handleResponse<AuthResponse>(
+      response
+    );
+
+
+  storeAuthentication(
+    auth
+  );
+
 
   return auth;
 }
 
+
+export async function register(
+  request: RegisterRequest
+): Promise<AuthResponse> {
+
+  clearStoredAuthentication();
+
+  const response =
+    await fetch(
+      `${API}/register`,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Accept:
+            "application/json",
+        },
+
+        body: JSON.stringify(
+          request
+        ),
+      }
+    );
+
+
+  const auth =
+    await handleResponse<AuthResponse>(
+      response
+    );
+
+
+  storeAuthentication(
+    auth
+  );
+
+
+  return auth;
+}
+
+
 export async function logout():
 Promise<void> {
+
   const token =
     getToken();
 
+
   try {
+
     if (token) {
+
       await fetch(
         `${API}/logout`,
         {
           method: "POST",
+
           headers: {
             Authorization:
               `Bearer ${token}`,
           },
         }
       );
+
     }
+
   } finally {
+
     clearStoredAuthentication();
   }
 }
 
+
 export function getToken():
 string | null {
+
   return localStorage.getItem(
     TOKEN_KEY
   );
 }
 
+
 export function getStoredUser():
 AuthUser | null {
+
   const value =
     localStorage.getItem(
       USER_KEY
     );
 
+
   if (!value) {
     return null;
   }
 
+
   try {
+
     return JSON.parse(
       value
     ) as AuthUser;
+
   } catch {
+
     clearStoredAuthentication();
+
     return null;
   }
 }
 
+
 export function getAuthHeaders():
 Record<string, string> {
+
   const token =
     getToken();
+
 
   return token
     ? {
@@ -148,8 +242,10 @@ Record<string, string> {
     : {};
 }
 
+
 export function clearStoredAuthentication():
 void {
+
   localStorage.removeItem(
     TOKEN_KEY
   );

@@ -7,12 +7,13 @@ import {
 } from "./authService";
 
 import type {
-  AdminDashboard,
-} from "../types/AdminDashboard";
+  AdminUser,
+  CreateAdminUserRequest,
+} from "../types/AdminUser";
 
 
 const API =
-  `${API_BASE_URL}/api/admin`;
+  `${API_BASE_URL}/api/admin/users`;
 
 
 async function handleResponse<T>(
@@ -51,12 +52,12 @@ async function handleResponse<T>(
 }
 
 
-export async function getAdminDashboard():
-Promise<AdminDashboard> {
+export async function getAdminUsers():
+Promise<AdminUser[]> {
 
   const response =
     await fetch(
-      `${API}/dashboard`,
+      API,
       {
         method: "GET",
 
@@ -70,7 +71,39 @@ Promise<AdminDashboard> {
     );
 
 
-  return handleResponse<AdminDashboard>(
+  return handleResponse<AdminUser[]>(
+    response
+  );
+}
+
+
+export async function createAdminUser(
+  request: CreateAdminUserRequest
+): Promise<AdminUser> {
+
+  const response =
+    await fetch(
+      API,
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type":
+            "application/json",
+
+          Accept:
+            "application/json",
+
+          ...getAuthHeaders(),
+        },
+
+        body:
+          JSON.stringify(request),
+      }
+    );
+
+
+  return handleResponse<AdminUser>(
     response
   );
 }
