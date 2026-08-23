@@ -45,12 +45,20 @@ public class SecurityConfig {
     }
 
 
+    /* =========================================================
+       PASSWORD ENCODER
+       ========================================================= */
+
     @Bean
     public PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
 
+
+    /* =========================================================
+       CORS
+       ========================================================= */
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -71,6 +79,9 @@ public class SecurityConfig {
                 );
 
 
+        /*
+         * Optional production frontend URL.
+         */
         if (
                 frontendUrl != null &&
                         !frontendUrl.isBlank()
@@ -81,8 +92,7 @@ public class SecurityConfig {
 
 
             while (
-                    normalizedFrontendUrl
-                            .endsWith("/")
+                    normalizedFrontendUrl.endsWith("/")
             ) {
 
                 normalizedFrontendUrl =
@@ -164,6 +174,10 @@ public class SecurityConfig {
     }
 
 
+    /* =========================================================
+       SPRING SECURITY
+       ========================================================= */
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http
@@ -197,6 +211,9 @@ public class SecurityConfig {
                 )
 
 
+                /*
+                 * Token authentication is stateless.
+                 */
                 .sessionManagement(
                         session ->
                                 session.sessionCreationPolicy(
@@ -209,9 +226,10 @@ public class SecurityConfig {
                         auth -> auth
 
 
-                                /*
-                                 * Browser CORS
-                                 */
+                                /* =================================================
+                                   CORS PREFLIGHT
+                                   ================================================= */
+
                                 .requestMatchers(
                                         HttpMethod.OPTIONS,
                                         "/**"
@@ -219,10 +237,10 @@ public class SecurityConfig {
                                 .permitAll()
 
 
-                                /*
-                                 * Public login and
-                                 * tourist registration
-                                 */
+                                /* =================================================
+                                   PUBLIC AUTHENTICATION
+                                   ================================================= */
+
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/api/auth/login",
@@ -231,9 +249,10 @@ public class SecurityConfig {
                                 .permitAll()
 
 
-                                /*
-                                 * Public destination browsing
-                                 */
+                                /* =================================================
+                                   PUBLIC SITE INFORMATION
+                                   ================================================= */
+
                                 .requestMatchers(
                                         HttpMethod.GET,
                                         "/api/sites",
@@ -242,9 +261,10 @@ public class SecurityConfig {
                                 .permitAll()
 
 
-                                /*
-                                 * Logged-in account actions
-                                 */
+                                /* =================================================
+                                   LOGGED-IN ACCOUNT ACTIONS
+                                   ================================================= */
+
                                 .requestMatchers(
                                         "/api/auth/me",
                                         "/api/auth/logout"
@@ -252,13 +272,10 @@ public class SecurityConfig {
                                 .authenticated()
 
 
-                                /*
-                                 * IMPORTANT:
-                                 *
-                                 * Everything under /api/admin
-                                 * can only be accessed by a
-                                 * SYSTEM_ADMIN account.
-                                 */
+                                /* =================================================
+                                   SYSTEM ADMIN
+                                   ================================================= */
+
                                 .requestMatchers(
                                         "/api/admin/**"
                                 )
@@ -267,9 +284,10 @@ public class SecurityConfig {
                                 )
 
 
-                                /*
-                                 * Entrance Officer
-                                 */
+                                /* =================================================
+                                   ENTRANCE OFFICER
+                                   ================================================= */
+
                                 .requestMatchers(
                                         "/api/entrance/**"
                                 )
@@ -279,8 +297,27 @@ public class SecurityConfig {
                                 )
 
 
+                                /* =================================================
+                                   SITE MANAGER
+
+                                   Tourist can read manager-created
+                                   time slots.
+                                   ================================================= */
+
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/api/manager/time-slots"
+                                )
+                                .hasAnyRole(
+                                        "TOURIST",
+                                        "SITE_MANAGER",
+                                        "SYSTEM_ADMIN"
+                                )
+
+
                                 /*
-                                 * Site Manager
+                                 * Other manager functions remain
+                                 * restricted.
                                  */
                                 .requestMatchers(
                                         "/api/manager/**"
@@ -291,8 +328,45 @@ public class SecurityConfig {
                                 )
 
 
+                                /* =================================================
+                                   SAFETY
+
+                                   Tourist can view alerts for the
+                                   selected site.
+
+                                   Example:
+                                   /api/safety/dashboard?siteId=2
+                                   ================================================= */
+
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/api/safety/dashboard"
+                                )
+                                .hasAnyRole(
+                                        "TOURIST",
+                                        "SAFETY_OFFICER",
+                                        "SYSTEM_ADMIN"
+                                )
+
+
                                 /*
-                                 * Safety Officer
+                                 * Tourist can report a safety issue.
+                                 */
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/api/safety/alerts"
+                                )
+                                .hasAnyRole(
+                                        "TOURIST",
+                                        "SAFETY_OFFICER",
+                                        "SYSTEM_ADMIN"
+                                )
+
+
+                                /*
+                                 * Status changes and all other
+                                 * safety operations remain restricted
+                                 * to Safety Officer/Admin.
                                  */
                                 .requestMatchers(
                                         "/api/safety/**"
@@ -303,8 +377,47 @@ public class SecurityConfig {
                                 )
 
 
+                                /* =================================================
+                                   MAINTENANCE
+
+                                   IMPORTANT NEW RULE:
+
+                                   Tourist can VIEW maintenance issues
+                                   for the selected site.
+
+                                   Example:
+                                   /api/maintenance/dashboard?siteId=2
+                                   ================================================= */
+
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/api/maintenance/dashboard"
+                                )
+                                .hasAnyRole(
+                                        "TOURIST",
+                                        "MAINTENANCE_OFFICER",
+                                        "SYSTEM_ADMIN"
+                                )
+
+
                                 /*
-                                 * Maintenance Officer
+                                 * Tourist can report a new site issue.
+                                 */
+                                .requestMatchers(
+                                        HttpMethod.POST,
+                                        "/api/maintenance/tasks"
+                                )
+                                .hasAnyRole(
+                                        "TOURIST",
+                                        "MAINTENANCE_OFFICER",
+                                        "SYSTEM_ADMIN"
+                                )
+
+
+                                /*
+                                 * Other maintenance operations,
+                                 * including status updates,
+                                 * remain restricted.
                                  */
                                 .requestMatchers(
                                         "/api/maintenance/**"
@@ -315,9 +428,25 @@ public class SecurityConfig {
                                 )
 
 
-                                /*
-                                 * Tour Guide
-                                 */
+                                /* =================================================
+                                   TOURIST OPERATIONS
+
+                                   Includes Tour Guide selection/request.
+                                   ================================================= */
+
+                                .requestMatchers(
+                                        "/api/tourist/**"
+                                )
+                                .hasAnyRole(
+                                        "TOURIST",
+                                        "SYSTEM_ADMIN"
+                                )
+
+
+                                /* =================================================
+                                   TOUR GUIDE
+                                   ================================================= */
+
                                 .requestMatchers(
                                         "/api/guide/**"
                                 )
@@ -327,18 +456,20 @@ public class SecurityConfig {
                                 )
 
 
-                                /*
-                                 * Bookings
-                                 */
+                                /* =================================================
+                                   BOOKINGS
+                                   ================================================= */
+
                                 .requestMatchers(
                                         "/api/bookings/**"
                                 )
                                 .authenticated()
 
 
-                                /*
-                                 * Site creation
-                                 */
+                                /* =================================================
+                                   SITE CREATION
+                                   ================================================= */
+
                                 .requestMatchers(
                                         HttpMethod.POST,
                                         "/api/sites",
@@ -350,9 +481,10 @@ public class SecurityConfig {
                                 )
 
 
-                                /*
-                                 * Site update
-                                 */
+                                /* =================================================
+                                   SITE UPDATE
+                                   ================================================= */
+
                                 .requestMatchers(
                                         HttpMethod.PUT,
                                         "/api/sites/**"
@@ -373,9 +505,10 @@ public class SecurityConfig {
                                 )
 
 
-                                /*
-                                 * Site delete
-                                 */
+                                /* =================================================
+                                   SITE DELETE
+                                   ================================================= */
+
                                 .requestMatchers(
                                         HttpMethod.DELETE,
                                         "/api/sites/**"
@@ -386,14 +519,18 @@ public class SecurityConfig {
                                 )
 
 
-                                /*
-                                 * Everything else requires login
-                                 */
+                                /* =================================================
+                                   EVERYTHING ELSE
+                                   ================================================= */
+
                                 .anyRequest()
                                 .authenticated()
                 )
 
 
+                /*
+                 * Custom token authentication filter.
+                 */
                 .addFilterBefore(
                         tokenFilter,
                         UsernamePasswordAuthenticationFilter.class

@@ -2,70 +2,94 @@ package com.tourflow.backend.service;
 
 import com.tourflow.backend.dto.GuideDashboardResponse;
 import com.tourflow.backend.dto.GuideRequestResponse;
-import com.tourflow.backend.entity.*;
+
+import com.tourflow.backend.entity.Booking;
+import com.tourflow.backend.entity.GuideAssignment;
+import com.tourflow.backend.entity.GuideRequestStatus;
+import com.tourflow.backend.entity.UserAccount;
+
 import com.tourflow.backend.exception.ResourceNotFoundException;
-import com.tourflow.backend.repository.BookingRepository;
+
 import com.tourflow.backend.repository.GuideAssignmentRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Service
 public class TourGuideService {
 
-    private final BookingRepository bookingRepository;
-    private final GuideAssignmentRepository assignmentRepository;
+    private final GuideAssignmentRepository
+            assignmentRepository;
+
 
     public TourGuideService(
-            BookingRepository bookingRepository,
             GuideAssignmentRepository assignmentRepository
     ) {
-        this.bookingRepository = bookingRepository;
-        this.assignmentRepository = assignmentRepository;
+
+        this.assignmentRepository =
+                assignmentRepository;
     }
+
 
     @Transactional(readOnly = true)
     public GuideDashboardResponse dashboard(
             UserAccount guide
     ) {
-        List<Booking> bookings =
-                bookingRepository
-                        .findByStatusOrderByVisitDateAscVisitTimeAsc(
-                                BookingStatus.CONFIRMED
+
+        List<GuideAssignment> assignments =
+                assignmentRepository
+                        .findForGuide(
+                                guide.getId()
                         );
 
+
         List<GuideRequestResponse> requests =
-                bookings.stream()
-                        .map(booking ->
-                                toResponse(
-                                        booking,
-                                        guide
-                                )
+                assignments
+                        .stream()
+                        .map(
+                                this::toResponse
                         )
                         .toList();
 
+
         long pending =
-                requests.stream()
-                        .filter(request ->
-                                request.requestStatus()
-                                        == GuideRequestStatus.PENDING
+                assignments
+                        .stream()
+                        .filter(
+                                assignment ->
+                                        assignment.getStatus()
+                                                ==
+                                                GuideRequestStatus.PENDING
                         )
                         .count();
 
+
         long accepted =
-                assignmentRepository
-                        .countByGuideIdAndStatus(
-                                guide.getId(),
-                                GuideRequestStatus.ACCEPTED
-                        );
+                assignments
+                        .stream()
+                        .filter(
+                                assignment ->
+                                        assignment.getStatus()
+                                                ==
+                                                GuideRequestStatus.ACCEPTED
+                        )
+                        .count();
+
 
         long rejected =
-                assignmentRepository
-                        .countByGuideIdAndStatus(
-                                guide.getId(),
-                                GuideRequestStatus.REJECTED
-                        );
+                assignments
+                        .stream()
+                        .filter(
+                                assignment ->
+                                        assignment.getStatus()
+                                                ==
+                                                GuideRequestStatus.REJECTED
+                        )
+                        .count();
+
 
         return new GuideDashboardResponse(
                 pending,
@@ -75,74 +99,93 @@ public class TourGuideService {
         );
     }
 
+
     @Transactional
     public GuideRequestResponse respond(
             Long bookingId,
             GuideRequestStatus status,
             UserAccount guide
     ) {
-        if (status == GuideRequestStatus.PENDING) {
+
+        if (
+                status ==
+                        GuideRequestStatus.PENDING
+        ) {
+
             throw new IllegalArgumentException(
                     "Use ACCEPTED or REJECTED"
             );
         }
 
-        Booking booking =
-                bookingRepository.findById(bookingId)
-                        .orElseThrow(() ->
-                                new ResourceNotFoundException(
-                                        "Booking not found"
-                                )
-                        );
 
+        /*
+         * The guide can respond only
+         * to a request specifically
+         * assigned to that guide.
+         */
         GuideAssignment assignment =
                 assignmentRepository
                         .findByBookingIdAndGuideId(
                                 bookingId,
                                 guide.getId()
                         )
-                        .orElseGet(
-                                GuideAssignment::new
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Guide request not found"
+                                        )
                         );
 
-        assignment.setBooking(booking);
-        assignment.setGuide(guide);
-        assignment.setStatus(status);
-        assignment.setLanguage("EN");
 
-        assignmentRepository.save(assignment);
+        assignment.setStatus(
+                status
+        );
+
+
+        GuideAssignment saved =
+                assignmentRepository
+                        .save(
+                                assignment
+                        );
+
 
         return toResponse(
-                booking,
-                guide
+                saved
         );
     }
 
+
     private GuideRequestResponse toResponse(
-            Booking booking,
-            UserAccount guide
+            GuideAssignment assignment
     ) {
-        GuideRequestStatus status =
-                assignmentRepository
-                        .findByBookingIdAndGuideId(
-                                booking.getId(),
-                                guide.getId()
-                        )
-                        .map(GuideAssignment::getStatus)
-                        .orElse(
-                                GuideRequestStatus.PENDING
-                        );
+
+        Booking booking =
+                assignment.getBooking();
+
 
         return new GuideRequestResponse(
+
                 booking.getId(),
+
                 booking.getBookingReference(),
-                booking.getUser().getFullName(),
-                booking.getSite().getName(),
+
+                booking
+                        .getUser()
+                        .getFullName(),
+
+                booking
+                        .getSite()
+                        .getName(),
+
                 booking.getVisitDate(),
+
                 booking.getVisitTime(),
+
                 booking.getVisitorCount(),
-                "EN",
-                status
+
+                assignment.getLanguage(),
+
+                assignment.getStatus()
         );
     }
 }

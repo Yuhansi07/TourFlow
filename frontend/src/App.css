@@ -1190,3 +1190,741 @@ button {
 #root {
   min-height: 100vh;
 }
+/* =========================================================
+   TOURFLOW - PROFESSIONAL STATUS / TITLE STYLES
+   ========================================================= */
+
+
+/* ---------- SITE STATUS ---------- */
+
+.site-status-value {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+
+  padding: 8px 16px;
+  margin-top: 10px;
+
+  border-radius: 999px;
+
+  font-size: 18px !important;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+
+  box-shadow:
+    0 6px 18px rgba(16, 185, 129, 0.12);
+}
+
+
+.site-status-value.open {
+  color: #059669;
+}
+
+
+.site-status-value.closed {
+  color: #dc2626;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+
+.site-status-value.maintenance {
+  color: #d97706;
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+
+/* ---------- CROWD LEVEL ---------- */
+
+.crowd-status-value {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+
+  padding: 8px 17px;
+  margin-top: 10px;
+
+  border-radius: 999px;
+
+  font-size: 18px !important;
+  font-weight: 800;
+  letter-spacing: 0.7px;
+
+  color: #047857;
+
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.13),
+    rgba(52, 211, 153, 0.06)
+  );
+
+  border: 1px solid rgba(16, 185, 129, 0.28);
+
+  box-shadow:
+    0 6px 18px rgba(16, 185, 129, 0.1);
+}
+
+
+/* ---------- TOUR GUIDE BUSINESS NAME ---------- */
+
+.guide-business-name {
+  display: block;
+
+  margin-top: 12px;
+
+  font-size: 23px !important;
+  line-height: 1.12;
+
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+
+  color: #073b32 !important;
+}
+
+
+.guide-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  width: fit-content;
+
+  margin-top: 12px;
+
+  padding: 6px 10px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  color: #855d00;
+
+  background: #fff9db;
+
+  border: 1px solid #f5df85;
+}
+
+
+/* ---------- SAFETY ALERT TITLE ---------- */
+
+.safety-alert-title {
+  margin-top: 12px;
+
+  font-size: 24px !important;
+  line-height: 1.2;
+
+  font-weight: 800;
+
+  letter-spacing: -0.4px;
+
+  color: #102f3b;
+}
+
+
+/* ---------- SAFETY STATUS ---------- */
+
+.safety-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+
+  margin-top: 12px;
+
+  padding: 7px 14px;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  letter-spacing: 0.6px;
+
+  color: #b45309;
+
+  background: #fff7ed;
+
+  border: 1px solid #fed7aa;
+}
+
+
+.safety-status-badge.in-progress {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+
+.safety-status-badge.resolved {
+  color: #047857;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+
+/* ---------- MAINTENANCE TITLE ---------- */
+
+.maintenance-issue-title {
+  margin-top: 12px;
+
+  font-size: 24px !important;
+  line-height: 1.2;
+
+  font-weight: 800;
+
+  letter-spacing: -0.4px;
+
+  color: #102f3b;
+}
+
+
+/* ---------- MAINTENANCE STATUS ---------- */
+
+.maintenance-status-badge {
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
+
+  margin-top: 14px;
+
+  padding: 7px 14px;
+
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  letter-spacing: 0.6px;
+
+  color: #b45309;
+
+  background: #fff7ed;
+
+  border: 1px solid #fed7aa;
+}
+
+
+.maintenance-status-badge.in-progress {
+  color: #1d4ed8;
+
+  background: #eff6ff;
+
+  border-color: #bfdbfe;
+}
+
+
+.maintenance-status-badge.completed {
+  color: #047857;
+
+  background: #ecfdf5;
+
+  border-color: #a7f3d0;
+}
+
+
+/* ---------- ALERT / ISSUE CARD ---------- */
+
+.operation-card {
+  position: relative;
+
+  padding: 24px !important;
+
+  border-radius: 18px !important;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f8fffc
+    );
+
+  border: 1px solid #d7e8e2 !important;
+
+  box-shadow:
+    0 12px 30px rgba(15, 57, 50, 0.06);
+
+  overflow: hidden;
+}
+
+
+.operation-card::before {
+  content: "";
+
+  position: absolute;
+
+  left: 20px;
+  top: 0;
+
+  width: 34px;
+  height: 4px;
+
+  border-radius:
+    0 0 5px 5px;
+
+  background: #34d399;
+}
+/* =========================================================
+   TOURIST PORTAL - POLISHED STATUS + GUIDE UI
+   Add this at the END of frontend/src/App.css
+   ========================================================= */
+
+.site-status-value,
+.crowd-status-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 86px;
+  margin-top: 10px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  font-size: 15px !important;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.65px;
+  border: 1px solid transparent;
+  box-shadow: 0 7px 18px rgba(15, 57, 50, 0.08);
+}
+
+.site-status-value.open {
+  color: #047857;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.site-status-value.closed {
+  color: #b91c1c;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.site-status-value.maintenance {
+  color: #b45309;
+  background: #fff7ed;
+  border-color: #fed7aa;
+}
+
+.crowd-status-value.low {
+  color: #047857;
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+.crowd-status-value.moderate {
+  color: #a16207;
+  background: #fefce8;
+  border-color: #fde68a;
+}
+
+.crowd-status-value.high {
+  color: #c2410c;
+  background: #fff7ed;
+  border-color: #fdba74;
+}
+
+.crowd-status-value.critical {
+  color: #b91c1c;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.guide-service-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px !important;
+  border: 1px solid #d6e7e1 !important;
+  background:
+    radial-gradient(circle at top right, rgba(110, 231, 183, 0.12), transparent 42%),
+    linear-gradient(145deg, #ffffff, #fbfffd);
+  box-shadow: 0 14px 30px rgba(15, 57, 50, 0.07);
+}
+
+.guide-service-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 22px;
+  width: 40px;
+  height: 4px;
+  border-radius: 0 0 999px 999px;
+  background: linear-gradient(90deg, #10b981, #6ee7b7);
+}
+
+.guide-business-name {
+  display: block;
+  margin-top: 12px;
+  color: #0f3f36 !important;
+  font-size: 22px !important;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.45px;
+}
+
+.guide-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #8a5b00;
+  background: #fff9db;
+  border: 1px solid #f4df86;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.guide-rating > span {
+  color: #e9aa00;
+  font-size: 15px;
+  line-height: 1;
+}
+/* =========================================================
+   TOURIST OPERATIONS - POLISHED ALERT / ISSUE UI
+   Add this at the END of frontend/src/App.css
+   ========================================================= */
+
+.tourist-operation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.operation-card {
+  position: relative;
+  overflow: hidden;
+  padding: 24px !important;
+  border-radius: 18px !important;
+  border: 1px solid #d7e8e2 !important;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(110, 231, 183, 0.12),
+      transparent 42%
+    ),
+    linear-gradient(145deg, #ffffff, #fbfffd);
+  box-shadow:
+    0 14px 32px rgba(15, 57, 50, 0.07);
+}
+
+.operation-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 22px;
+  width: 40px;
+  height: 4px;
+  border-radius: 0 0 999px 999px;
+  background: linear-gradient(90deg, #10b981, #6ee7b7);
+}
+
+.operation-card-topline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.operation-category {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.9px;
+  color: #64748b;
+}
+
+.severity-badge,
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.55px;
+}
+
+.severity-low,
+.priority-low {
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.severity-medium,
+.priority-medium {
+  color: #a16207;
+  background: #fefce8;
+  border: 1px solid #fde68a;
+}
+
+.severity-high,
+.priority-high {
+  color: #c2410c;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+}
+
+.severity-critical {
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+.safety-alert-title,
+.maintenance-issue-title {
+  display: block;
+  margin-top: 15px;
+  color: #102f3b;
+  font-size: 24px !important;
+  line-height: 1.18;
+  font-weight: 800;
+  letter-spacing: -0.45px;
+}
+
+.operation-site-label {
+  width: fit-content;
+  margin-top: 12px;
+  padding: 5px 9px;
+  border-radius: 8px;
+  color: #047857;
+  background: #ecfdf5;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.operation-location {
+  display: block;
+  margin-top: 11px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.operation-description {
+  margin: 14px 0 16px;
+  color: #334155;
+  line-height: 1.65;
+}
+
+.operation-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.safety-status-badge,
+.maintenance-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.45px;
+}
+
+.safety-status-badge.open,
+.maintenance-status-badge.pending {
+  color: #b45309;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+}
+
+.safety-status-badge.in-progress,
+.maintenance-status-badge.in-progress {
+  color: #1d4ed8;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.safety-status-badge.resolved,
+.maintenance-status-badge.completed {
+  color: #047857;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.operation-time {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.operation-form-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #dbe7e3;
+}
+/* =========================================================
+   FINAL TOURIST PORTAL UI FIX
+   ========================================================= */
+
+
+/* ---------- GUIDE RATING ---------- */
+
+.guide-rating {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  width: auto !important;
+
+  gap: 5px !important;
+
+  margin-top: 10px;
+
+  padding: 0 !important;
+
+  border: none !important;
+  background: transparent !important;
+
+  color: #e6a700 !important;
+
+  font-size: 14px !important;
+  font-weight: 800 !important;
+
+  box-shadow: none !important;
+}
+
+
+.guide-rating > span {
+  color: #e6a700 !important;
+
+  font-size: 15px !important;
+
+  line-height: 1;
+}
+
+
+/* =========================================================
+   SITE STATUS - NOT BUTTON STYLE
+   ========================================================= */
+
+.site-status-value {
+  display: flex !important;
+  align-items: center;
+
+  width: fit-content !important;
+
+  margin-top: 12px;
+
+  padding: 3px 0 3px 12px !important;
+
+  border: none !important;
+  border-left: 4px solid #10b981 !important;
+
+  border-radius: 0 !important;
+
+  background: transparent !important;
+
+  box-shadow: none !important;
+
+  color: #059669 !important;
+
+  font-size: 25px !important;
+  font-weight: 850 !important;
+
+  letter-spacing: 0.4px;
+}
+
+
+.site-status-value.closed {
+  color: #dc2626 !important;
+
+  border-left-color:
+    #ef4444 !important;
+}
+
+
+.site-status-value.maintenance {
+  color: #d97706 !important;
+
+  border-left-color:
+    #f59e0b !important;
+}
+
+
+/* =========================================================
+   CROWD LEVEL - NOT BUTTON STYLE
+   ========================================================= */
+
+.crowd-status-value {
+  display: flex !important;
+  align-items: center;
+
+  width: fit-content !important;
+
+  margin-top: 12px;
+
+  padding: 3px 0 3px 12px !important;
+
+  border: none !important;
+
+  border-left: 4px solid #10b981 !important;
+
+  border-radius: 0 !important;
+
+  background: transparent !important;
+
+  box-shadow: none !important;
+
+  font-size: 25px !important;
+  font-weight: 850 !important;
+
+  letter-spacing: 0.4px;
+}
+
+
+.crowd-status-value.low {
+  color: #059669 !important;
+
+  border-left-color:
+    #10b981 !important;
+}
+
+
+.crowd-status-value.moderate {
+  color: #ca8a04 !important;
+
+  border-left-color:
+    #eab308 !important;
+}
+
+
+.crowd-status-value.high {
+  color: #ea580c !important;
+
+  border-left-color:
+    #f97316 !important;
+}
+
+
+.crowd-status-value.critical {
+  color: #dc2626 !important;
+
+  border-left-color:
+    #ef4444 !important;
+}
