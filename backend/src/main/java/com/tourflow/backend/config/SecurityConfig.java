@@ -232,6 +232,41 @@ public class SecurityConfig {
 
 
                                 /* =========================
+                                   TOUR GUIDE
+                                   IMPORTANT:
+                                   Explicit authority matching
+                                   ========================= */
+
+                                .requestMatchers(
+                                        HttpMethod.GET,
+                                        "/api/guide/dashboard"
+                                )
+                                .hasAnyAuthority(
+                                        "ROLE_TOUR_GUIDE",
+                                        "ROLE_SYSTEM_ADMIN"
+                                )
+
+
+                                .requestMatchers(
+                                        HttpMethod.PATCH,
+                                        "/api/guide/requests/**"
+                                )
+                                .hasAnyAuthority(
+                                        "ROLE_TOUR_GUIDE",
+                                        "ROLE_SYSTEM_ADMIN"
+                                )
+
+
+                                .requestMatchers(
+                                        "/api/guide/**"
+                                )
+                                .hasAnyAuthority(
+                                        "ROLE_TOUR_GUIDE",
+                                        "ROLE_SYSTEM_ADMIN"
+                                )
+
+
+                                /* =========================
                                    ADMIN
                                    ========================= */
 
@@ -361,22 +396,6 @@ public class SecurityConfig {
                                         "TOURIST",
                                         "SYSTEM_ADMIN"
                                 )
-
-
-                                /* =========================
-                                   TOUR GUIDE
-
-                                   IMPORTANT:
-                                   User must have a valid token.
-                                   The guide service uses the
-                                   authenticated user itself when
-                                   loading/responding to requests.
-                                   ========================= */
-
-                                .requestMatchers(
-                                        "/api/guide/**"
-                                )
-                                .authenticated()
 
 
                                 /* =========================
