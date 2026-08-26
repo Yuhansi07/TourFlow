@@ -3,6 +3,7 @@ package com.tourflow.backend.config;
 import com.tourflow.backend.security.TokenAuthenticationFilter;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -45,6 +46,34 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+
+    /*
+     * IMPORTANT:
+     *
+     * TokenAuthenticationFilter is already added manually
+     * inside the Spring Security filter chain.
+     *
+     * Because it is also a Spring @Component, Spring Boot
+     * would otherwise register it as a normal servlet filter.
+     *
+     * Disable that automatic servlet registration so the
+     * filter runs only inside Spring Security.
+     */
+    @Bean
+    public FilterRegistrationBean<TokenAuthenticationFilter>
+    tokenAuthenticationFilterRegistration(
+            TokenAuthenticationFilter filter
+    ) {
+
+        FilterRegistrationBean<TokenAuthenticationFilter>
+                registration =
+                new FilterRegistrationBean<>(filter);
+
+        registration.setEnabled(false);
+
+        return registration;
     }
 
 
@@ -248,12 +277,9 @@ public class SecurityConfig {
                                 /* =========================
                                    TOUR GUIDE
 
-                                   Authentication is checked
-                                   here.
-
-                                   TOUR_GUIDE / SYSTEM_ADMIN
-                                   role verification is done
-                                   inside TourGuideController.
+                                   Role verification is also
+                                   performed inside
+                                   TourGuideController.
                                    ========================= */
 
                                 .requestMatchers(
@@ -466,6 +492,9 @@ public class SecurityConfig {
                 )
 
 
+                /*
+                 * Token filter runs ONLY here now.
+                 */
                 .addFilterBefore(
                         tokenFilter,
                         UsernamePasswordAuthenticationFilter.class
