@@ -54,6 +54,7 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
+
         List<String> allowedOrigins =
                 new ArrayList<>(
                         List.of(
@@ -67,16 +68,19 @@ public class SecurityConfig {
 
 
         if (
-                frontendUrl != null &&
+                frontendUrl != null
+                        &&
                         !frontendUrl.isBlank()
         ) {
 
             String normalizedFrontendUrl =
                     frontendUrl.trim();
 
+
             while (
                     normalizedFrontendUrl.endsWith("/")
             ) {
+
                 normalizedFrontendUrl =
                         normalizedFrontendUrl.substring(
                                 0,
@@ -84,12 +88,15 @@ public class SecurityConfig {
                         );
             }
 
+
             if (
-                    !normalizedFrontendUrl.isBlank() &&
+                    !normalizedFrontendUrl.isBlank()
+                            &&
                             !allowedOrigins.contains(
                                     normalizedFrontendUrl
                             )
             ) {
+
                 allowedOrigins.add(
                         normalizedFrontendUrl
                 );
@@ -100,6 +107,7 @@ public class SecurityConfig {
         configuration.setAllowedOrigins(
                 allowedOrigins
         );
+
 
         configuration.setAllowedMethods(
                 List.of(
@@ -112,6 +120,7 @@ public class SecurityConfig {
                 )
         );
 
+
         configuration.setAllowedHeaders(
                 List.of(
                         "Authorization",
@@ -120,15 +129,18 @@ public class SecurityConfig {
                 )
         );
 
+
         configuration.setExposedHeaders(
                 List.of(
                         "Authorization"
                 )
         );
 
+
         configuration.setAllowCredentials(
                 false
         );
+
 
         configuration.setMaxAge(
                 3600L
@@ -138,10 +150,12 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
+
         source.registerCorsConfiguration(
                 "/**",
                 configuration
         );
+
 
         return source;
     }
@@ -233,37 +247,19 @@ public class SecurityConfig {
 
                                 /* =========================
                                    TOUR GUIDE
-                                   IMPORTANT:
-                                   Explicit authority matching
+
+                                   Authentication is checked
+                                   here.
+
+                                   TOUR_GUIDE / SYSTEM_ADMIN
+                                   role verification is done
+                                   inside TourGuideController.
                                    ========================= */
-
-                                .requestMatchers(
-                                        HttpMethod.GET,
-                                        "/api/guide/dashboard"
-                                )
-                                .hasAnyAuthority(
-                                        "ROLE_TOUR_GUIDE",
-                                        "ROLE_SYSTEM_ADMIN"
-                                )
-
-
-                                .requestMatchers(
-                                        HttpMethod.PATCH,
-                                        "/api/guide/requests/**"
-                                )
-                                .hasAnyAuthority(
-                                        "ROLE_TOUR_GUIDE",
-                                        "ROLE_SYSTEM_ADMIN"
-                                )
-
 
                                 .requestMatchers(
                                         "/api/guide/**"
                                 )
-                                .hasAnyAuthority(
-                                        "ROLE_TOUR_GUIDE",
-                                        "ROLE_SYSTEM_ADMIN"
-                                )
+                                .authenticated()
 
 
                                 /* =========================
