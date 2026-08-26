@@ -34,10 +34,14 @@ public class TokenAuthenticationFilter
     protected boolean shouldNotFilter(
             HttpServletRequest request
     ) {
-        String path = request.getRequestURI();
 
-        if (path.equals("/api/auth/login")
-                || path.equals("/api/auth/register")) {
+        String path =
+                request.getRequestURI();
+
+        if (
+                path.equals("/api/auth/login")
+                        || path.equals("/api/auth/register")
+        ) {
             return true;
         }
 
@@ -54,21 +58,50 @@ public class TokenAuthenticationFilter
     ) throws ServletException, IOException {
 
         String token =
-                readBearerToken(request);
+                readBearerToken(
+                        request
+                );
 
-        if (token != null
-                && SecurityContextHolder
-                .getContext()
-                .getAuthentication() == null) {
+        if (
+                token != null
+                        && SecurityContextHolder
+                        .getContext()
+                        .getAuthentication() == null
+        ) {
 
             sessionRepository
                     .findByTokenAndExpiresAtAfter(
                             token,
                             LocalDateTime.now()
                     )
-                    .map(AuthSession::getUser)
-                    .filter(UserAccount::isActive)
-                    .ifPresent(this::setAuthentication);
+                    .map(
+                            AuthSession::getUser
+                    )
+                    .filter(
+                            UserAccount::isActive
+                    )
+                    .ifPresent(
+                            user -> {
+
+                                setAuthentication(
+                                        user
+                                );
+
+                                System.out.println(
+                                        "AUTH DEBUG -> path="
+                                                + request.getRequestURI()
+                                                + ", email="
+                                                + user.getEmail()
+                                                + ", role="
+                                                + user.getRole()
+                                                + ", authorities="
+                                                + SecurityContextHolder
+                                                .getContext()
+                                                .getAuthentication()
+                                                .getAuthorities()
+                                );
+                            }
+                    );
         }
 
         filterChain.doFilter(
@@ -80,36 +113,61 @@ public class TokenAuthenticationFilter
     private void setAuthentication(
             UserAccount user
     ) {
+
         SimpleGrantedAuthority authority =
                 new SimpleGrantedAuthority(
-                        "ROLE_" + user.getRole().name()
+                        "ROLE_"
+                                + user.getRole()
+                                .name()
                 );
+
+        System.out.println(
+                "AUTH DEBUG -> user="
+                        + user.getEmail()
+                        + ", role="
+                        + user.getRole()
+                        + ", authority="
+                        + authority.getAuthority()
+        );
 
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
                         user,
                         null,
-                        List.of(authority)
+                        List.of(
+                                authority
+                        )
                 );
 
         SecurityContextHolder
                 .getContext()
-                .setAuthentication(authentication);
+                .setAuthentication(
+                        authentication
+                );
     }
 
     private String readBearerToken(
             HttpServletRequest request
     ) {
-        String authorization =
-                request.getHeader("Authorization");
 
-        if (authorization == null
-                || !authorization.startsWith("Bearer ")) {
+        String authorization =
+                request.getHeader(
+                        "Authorization"
+                );
+
+        if (
+                authorization == null
+                        || !authorization.startsWith(
+                        "Bearer "
+                )
+        ) {
             return null;
         }
 
         String token =
-                authorization.substring(7).trim();
+                authorization
+                        .substring(7)
+                        .trim();
 
         return token.isBlank()
                 ? null
