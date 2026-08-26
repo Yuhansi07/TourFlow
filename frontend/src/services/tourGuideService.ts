@@ -1,4 +1,6 @@
-import { API_BASE_URL } from "../config/apiConfig";
+import {
+  API_BASE_URL,
+} from "../config/apiConfig";
 
 import {
   getAuthHeaders,
@@ -13,60 +15,93 @@ import type {
 const API =
   `${API_BASE_URL}/api/guide`;
 
-async function parse<T>(
+async function handleResponse<T>(
   response: Response
 ): Promise<T> {
+
   if (!response.ok) {
+
     let message =
       `Request failed (${response.status})`;
 
     try {
-      const data = await response.json();
+
+      const data =
+        await response.json();
+
       message =
-        data.message
-        ?? data.error
-        ?? message;
+        data.message ??
+        data.error ??
+        message;
+
     } catch {
-      // default
+      // Keep default message.
     }
 
-    throw new Error(message);
+    throw new Error(
+      message
+    );
   }
 
-  return response.json() as Promise<T>;
+  return response.json();
 }
+
+
+/* =========================================================
+   TOUR GUIDE DASHBOARD
+   ========================================================= */
 
 export async function getGuideDashboard():
 Promise<GuideDashboard> {
+
   const response =
     await fetch(
       `${API}/dashboard`,
       {
-        headers:
-          getAuthHeaders(),
+        method: "GET",
+
+        headers: {
+          Accept:
+            "application/json",
+
+          ...getAuthHeaders(),
+        },
       }
     );
 
-  return parse<GuideDashboard>(
+  return handleResponse<GuideDashboard>(
     response
   );
 }
+
+
+/* =========================================================
+   ACCEPT / REJECT GUIDE REQUEST
+   ========================================================= */
 
 export async function respondToGuideRequest(
   bookingId: number,
   status: GuideRequestStatus
 ): Promise<GuideRequest> {
+
   const response =
     await fetch(
-      `${API}/requests/${bookingId}?status=${status}`,
+      `${API}/requests/${bookingId}?status=${encodeURIComponent(
+        status
+      )}`,
       {
         method: "PATCH",
-        headers:
-          getAuthHeaders(),
+
+        headers: {
+          Accept:
+            "application/json",
+
+          ...getAuthHeaders(),
+        },
       }
     );
 
-  return parse<GuideRequest>(
+  return handleResponse<GuideRequest>(
     response
   );
 }
