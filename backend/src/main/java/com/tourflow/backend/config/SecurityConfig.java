@@ -277,15 +277,20 @@ public class SecurityConfig {
                                 /* =========================
                                    TOUR GUIDE
 
-                                   Role verification is also
-                                   performed inside
+                                   IMPORTANT:
+                                   Spring Security does NOT
+                                   block this endpoint here.
+
+                                   Bearer token, active user
+                                   and TOUR_GUIDE role are
+                                   verified directly inside
                                    TourGuideController.
                                    ========================= */
 
                                 .requestMatchers(
                                         "/api/guide/**"
                                 )
-                                .authenticated()
+                                .permitAll()
 
 
                                 /* =========================
