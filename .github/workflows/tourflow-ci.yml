@@ -1,44 +1,4 @@
-
-name: TourFlow CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-
-jobs:
-  frontend:
-    name: Frontend - install and build
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-
-    defaults:
-      run:
-        working-directory: frontend
-
-    steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build frontend
-        run: npm run build
-
-      - name: Save frontend build
+      - name: Upload frontend build
         uses: actions/upload-artifact@v4
         with:
           name: tourflow-frontend-dist
@@ -47,10 +7,9 @@ jobs:
           retention-days: 3
 
   backend:
-    name: Backend - Maven build and tests
+    name: Backend - build and test
     runs-on: ubuntu-latest
     timeout-minutes: 25
-
     services:
       mysql:
         image: mysql:8.4
@@ -64,15 +23,11 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=12
-
     defaults:
       run:
         working-directory: backend
-
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
@@ -80,7 +35,6 @@ jobs:
           java-version: '21'
           cache: maven
           cache-dependency-path: backend/pom.xml
-
       - name: Build and test backend
         env:
           MYSQLHOST: 127.0.0.1
@@ -89,11 +43,80 @@ jobs:
           MYSQLUSER: root
           MYSQLPASSWORD: ci_test_only
         run: mvn --batch-mode --no-transfer-progress clean verify
-
-      - name: Save backend JAR
+      - name: Upload backend JAR
         uses: actions/upload-artifact@v4
         with:
           name: tourflow-backend-jar
           path: backend/target/*.jar
           if-no-files-found: error
           retention-days: 3
+
+  deploy-frontend:
+    name: CD - Deploy frontend to Vercel
+    needs: [frontend, backend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    defaults:
+      run:
+        working-directory: frontend
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Vercel secrets
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "::error::Add VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID as GitHub Actions secrets."
+            exit 1
+          fi
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+      - name: Pull production configuration
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+      - name: Validate backend API URL
+        run: |
+          config=".vercel/.env.production.local"
+          if [ ! -f "$config" ] || ! grep -q '^VITE_API_BASE_URL=' "$config"; then
+            echo "::error::Set VITE_API_BASE_URL for Production in Vercel environment variables."
+            exit 1
+          fi
+          if grep '^VITE_API_BASE_URL=' "$config" | grep -Eiq 'localhost|127\.0\.0\.1|http://'; then
+            echo "::error::VITE_API_BASE_URL must be a public HTTPS backend URL, not localhost or HTTP."
+            exit 1
+          fi
+      - name: Build production deployment
+        run: vercel build --prod --token="$VERCEL_TOKEN"
+      - name: Deploy production to Vercel
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
+
+  deploy-backend:
+    name: CD - Deploy backend to Railway (disabled until trial is active)
+    needs: [frontend, backend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && vars.ENABLE_RAILWAY_CD == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_PROJECT_ID: ${{ vars.RAILWAY_PROJECT_ID }}
+      RAILWAY_SERVICE: ${{ vars.RAILWAY_SERVICE }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Railway settings
+        run: |
+          if [ -z "$RAILWAY_TOKEN" ] || [ -z "$RAILWAY_PROJECT_ID" ] || [ -z "$RAILWAY_SERVICE" ]; then
+            echo "::error::Set RAILWAY_TOKEN secret, RAILWAY_PROJECT_ID and RAILWAY_SERVICE variables."
+            exit 1
+          fi
+      - name: Install Railway CLI
+        run: npm install --global @railway/cli
+      - name: Deploy backend to Railway
+        run: railway up ./backend --project "$RAILWAY_PROJECT_ID" --environment production --service "$RAILWAY_SERVICE"
