@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
+@org.springframework.context.annotation.Profile("dev")
 public class OperationsDataInitializer {
 
     @Bean
